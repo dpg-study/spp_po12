@@ -15,9 +15,7 @@ class Employee(OrganizationComponent):
         self.salary = salary
 
     def display(self, depth=0):
-        print(
-            f"{'  ' * depth}- {self.position}: {self.name} (Отдел: {self.department}, Зарплата: {self.salary})"
-        )
+        print(f"{'  ' * depth}- {self.position}: {self.name} (Отдел: {self.department}, Зарплата: {self.salary})")
 
 
 class Manager(Employee):

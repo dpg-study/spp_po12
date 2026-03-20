@@ -44,10 +44,10 @@ class BurgerOrderBuilder:
 class OrderDirector:
     """Директор, управляющий процессом сборки."""
 
-    def construct_vegan_takeaway(self, builder):
-        builder.set_burger("Веганский")
-        builder.set_drink("Пепси", is_hot=False)
-        builder.set_packaging("с собой")
+    def construct_vegan_takeaway(self, order_builder):
+        order_builder.set_burger("Веганский")
+        order_builder.set_drink("Пепси", is_hot=False)
+        order_builder.set_packaging("с собой")
 
 
 if __name__ == "__main__":

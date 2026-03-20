@@ -15,9 +15,7 @@ class Employee(OrganizationComponent):
         self.salary = salary
 
     def display(self, depth=0):
-        print(
-            f"{'  ' * depth}- {self.position}: {self.name} (Отдел: {self.department}, Зарплата: {self.salary})"
-        )
+        print(f"{'  ' * depth}- {self.position}: {self.name} (Отдел: {self.department}, Зарплата: {self.salary})")
 
 
 class Manager(Employee):
@@ -59,13 +57,11 @@ def generate_salary_report(root_manager):
     print("-" * 70)
 
     current_dept = ""
-    for emp, depth in sorted_list:
+    for emp, _ in sorted_list:
         if current_dept and current_dept != emp.department:
             print("-" * 70)  # Визуальный разделитель групп
 
-        print(
-            f"{emp.department:<15} | {emp.position:<22} | {emp.name:<15} | {emp.salary:,} руб."
-        )
+        print(f"{emp.department:<15} | {emp.position:<22} | {emp.name:<15} | {emp.salary:,} руб.")
         current_dept = emp.department
 
 
