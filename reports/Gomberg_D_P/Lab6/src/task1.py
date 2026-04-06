@@ -38,18 +38,18 @@ def log_purchase(item):
 
 
 class TestCart:
-    def test_add_item(self, empty_cart):
-        empty_cart.add_item("Apple", 10.0)
-        assert len(empty_cart.items) == 1
+    def test_add_item(self, cart):
+        cart.add_item("Apple", 10.0)
+        assert len(cart.items) == 1
 
-    def test_add_item_negative_price_raises_error(self, empty_cart):
+    def test_add_item_negative_price_raises_error(self, cart):
         with pytest.raises(ValueError, match="Price cannot be negative"):
-            empty_cart.add_item("Apple", -10.0)
+            cart.add_item("Apple", -10.0)
 
-    def test_total(self, empty_cart):
-        empty_cart.add_item("Apple", 10.0)
-        empty_cart.add_item("Banana", 5.0)
-        assert empty_cart.total() == 15.0
+    def test_total(self, cart):
+        cart.add_item("Apple", 10.0)
+        cart.add_item("Banana", 5.0)
+        assert cart.total() == 15.0
 
     @pytest.mark.parametrize(
         "discount,expected_price",
@@ -59,16 +59,16 @@ class TestCart:
             (100, 0.0),
         ],
     )
-    def test_apply_discount(self, empty_cart, discount, expected_price):
-        empty_cart.add_item("Item", 100.0)
-        empty_cart.apply_discount(discount)
-        assert empty_cart.items[0]["price"] == expected_price
+    def test_apply_discount(self, cart, discount, expected_price):
+        cart.add_item("Item", 100.0)
+        cart.apply_discount(discount)
+        assert cart.items[0]["price"] == expected_price
 
     @pytest.mark.parametrize("invalid_discount", [-1, 101])
-    def test_apply_discount_invalid_raises_error(self, empty_cart, invalid_discount):
-        empty_cart.add_item("Item", 100.0)
+    def test_apply_discount_invalid_raises_error(self, cart, invalid_discount):
+        cart.add_item("Item", 100.0)
         with pytest.raises(ValueError, match="Discount must be between 0 and 100"):
-            empty_cart.apply_discount(invalid_discount)
+            cart.apply_discount(invalid_discount)
 
 
 class TestLogPurchase:
@@ -87,17 +87,17 @@ class TestApplyCoupon:
             ("HALF", 50),
         ],
     )
-    def test_apply_coupon_valid(self, empty_cart, coupon, discount):
-        empty_cart.add_item("Item", 100.0)
-        empty_cart.apply_coupon(coupon)
-        assert empty_cart.items[0]["price"] == 100.0 * (1 - discount / 100)
+    def test_apply_coupon_valid(self, cart, coupon, discount):
+        cart.add_item("Item", 100.0)
+        cart.apply_coupon(coupon)
+        assert cart.items[0]["price"] == 100.0 * (1 - discount / 100)
 
-    def test_apply_coupon_invalid_raises_error(self, empty_cart):
-        empty_cart.add_item("Item", 100.0)
+    def test_apply_coupon_invalid_raises_error(self, cart):
+        cart.add_item("Item", 100.0)
         with pytest.raises(ValueError, match="Invalid coupon"):
-            empty_cart.apply_coupon("INVALID")
+            cart.apply_coupon("INVALID")
 
-    def test_apply_coupon_with_monkeypatch_coupons_dict(self, empty_cart, monkeypatch):
+    def test_apply_coupon_with_monkeypatch_coupons_dict(self, cart, monkeypatch):
         def patched_apply_coupon(self, coupon_code):
             test_coupons = {"TEST": 25}
             if coupon_code in test_coupons:
@@ -106,13 +106,13 @@ class TestApplyCoupon:
                 raise ValueError("Invalid coupon")
 
         monkeypatch.setattr(Cart, "apply_coupon", patched_apply_coupon)
-        empty_cart.add_item("Item", 100.0)
-        empty_cart.apply_coupon("TEST")
-        assert empty_cart.items[0]["price"] == 75.0
+        cart.add_item("Item", 100.0)
+        cart.apply_coupon("TEST")
+        assert cart.items[0]["price"] == 75.0
 
 
 @pytest.fixture
-def empty_cart():
+def cart():
     return Cart()
 
 

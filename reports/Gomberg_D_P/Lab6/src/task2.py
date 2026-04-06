@@ -3,10 +3,10 @@ import sys
 
 import pytest
 
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "..", "Lab1", "src"))
-
 from Test1 import find_mode
 from Test2 import str_str
+
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "..", "Lab1", "src"))
 
 
 class TestFindMode:
